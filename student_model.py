@@ -26,9 +26,7 @@ class StudentModel(nn.Module):
         self.log_inv_t = torch.nn.Parameter(torch.tensor(1.0 / args.t).log(), requires_grad=args.finetune_t)
         self.add_margin = args.additive_margin
         self.batch_size = args.batch_size
-        # pre_batch: number of pre-batch used for negatives
         self.pre_batch = args.pre_batch
-        # 定义pre_batch_vectors数量
         num_pre_batch_vectors = max(1, self.pre_batch) * self.batch_size
 
         random_vector = torch.randn(num_pre_batch_vectors, self.config.hidden_size)
@@ -61,10 +59,10 @@ class StudentModel(nn.Module):
                           attention_mask=mask,
                           token_type_ids=token_type_ids,
                           return_dict=True)
-        # print(0, mask)
+
         last_hidden_state = outputs.last_hidden_state
         cls_output = last_hidden_state[:, 0, :]
-        # print(1, last_hidden_state.shape)
+
         cls_output = _pool_output(self.args.pooling, cls_output, mask, last_hidden_state)
         mask_output = torch.empty(cls_output.shape[0], cls_output.shape[1]).to(cls_output.device)
         if mask_flag:
