@@ -112,8 +112,7 @@ class CustomBertModel(nn.Module, ABC):
         labels = torch.arange(batch_size).to(hr_vector.device)
 
         logits = hr_vector.mm(tail_vector.t())
-        # stacked_hrt = torch.cat((hr_vector, tail_vector), dim=0)
-        # logits = torch.corrcoef(stacked_hrt)[:batch_size,batch_size:].to(hr_vector.device)
+
         if self.training:
             logits -= torch.zeros(logits.size()).fill_diagonal_(self.add_margin).to(logits.device)
 
