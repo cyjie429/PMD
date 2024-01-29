@@ -3,7 +3,6 @@ import json
 import torch.backends.cudnn as cudnn
 
 from config import args
-from trainer import Trainer
 from logger_config import logger
 from kd import DistilledTrainer
 
